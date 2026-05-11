@@ -384,9 +384,6 @@ function FarmPage() {
   );
 }
 
-function shortAddr(a: string) {
-  return a.length > 12 ? `${a.slice(0, 6)}…${a.slice(-4)}` : a;
-}
 
 function DragonsInventory({ dragons, onFuse }: { dragons: DBDragon[]; onFuse: (a: DBDragon, b: DBDragon) => void }) {
   if (dragons.length === 0) return <p className="text-xs text-muted-foreground py-4 text-center">No tienes dragones libres. Abre huevos o retira dragones del mapa.</p>;
