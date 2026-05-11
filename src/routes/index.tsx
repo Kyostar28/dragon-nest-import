@@ -41,7 +41,7 @@ function Landing() {
     <main className="min-h-screen flex flex-col bg-grid">
       {/* Header */}
       <header className="px-6 py-5 flex items-center gap-3">
-        <img src={etcLogo} alt="ETC" className="h-9 w-9 drop-shadow-[0_0_12px_rgba(74,222,128,0.6)]" />
+        <img src={etcLogo} alt="ETC" className="h-9 w-9 rounded-full object-cover drop-shadow-[0_0_12px_rgba(74,222,128,0.6)]" />
         <span className="font-display text-lg tracking-[0.35em] text-primary text-glow">DRACO ETC</span>
       </header>
 
