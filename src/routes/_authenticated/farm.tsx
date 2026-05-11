@@ -20,6 +20,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
 import { LogOut, Lock, Plus, Sparkles, ShoppingBag } from "lucide-react";
+import { GameHeader } from "@/components/GameHeader";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/_authenticated/farm")({
@@ -162,31 +163,7 @@ function FarmPage() {
   return (
     <div className="min-h-screen bg-grid">
       {/* Header */}
-      <header className="border-b border-border/60 backdrop-blur-md sticky top-0 z-30 bg-background/70">
-        <div className="container mx-auto flex items-center justify-between px-4 py-3 gap-4">
-          <div className="flex items-center gap-3">
-            <div className="relative w-8 h-8 rotate-45 rounded-md bg-gradient-to-br from-primary to-accent shadow-[var(--shadow-glow)]">
-              <div className="absolute inset-1 rounded-sm bg-background flex items-center justify-center -rotate-45">
-                <span className="font-display text-primary text-xs">D</span>
-              </div>
-            </div>
-            <span className="font-display text-sm tracking-widest text-glow hidden sm:inline">DRACOS · ETC</span>
-          </div>
-          <div className="flex items-center gap-3 text-xs">
-            <div className="px-3 py-1.5 rounded-md border border-border bg-card/60">
-              <span className="text-muted-foreground">Wallet · </span>
-              <span className="font-mono">{shortAddr(profile?.wallet_address ?? "")}</span>
-            </div>
-            <div className="px-3 py-1.5 rounded-md border border-accent/40 bg-accent/10 text-accent-foreground">
-              <span className="font-display">{Number(profile?.etc_balance ?? 0).toFixed(4)}</span> ETC
-            </div>
-            <div className="px-3 py-1.5 rounded-md border border-primary/40 bg-primary/10 text-primary">
-              <span className="font-display">{(profile?.draco_points_total ?? 0).toLocaleString()}</span> DP
-            </div>
-            <Button variant="ghost" size="sm" onClick={signOut}><LogOut className="w-4 h-4" /></Button>
-          </div>
-        </div>
-      </header>
+      <GameHeader />
 
       <div className="container mx-auto px-4 py-8 grid lg:grid-cols-[1fr_360px] gap-8">
         {/* Map */}
