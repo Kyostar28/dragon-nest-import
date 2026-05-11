@@ -19,7 +19,7 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
-import { LogOut, Lock, Plus, Sparkles, ShoppingBag } from "lucide-react";
+import { Lock, Plus, Sparkles, ShoppingBag } from "lucide-react";
 import { GameHeader } from "@/components/GameHeader";
 import { cn } from "@/lib/utils";
 
@@ -28,7 +28,7 @@ export const Route = createFileRoute("/_authenticated/farm")({
 });
 
 function FarmPage() {
-  const { session, signOut } = useAuth();
+  const { session } = useAuth();
   const userId = session!.user.id;
   const qc = useQueryClient();
 
