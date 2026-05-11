@@ -21,7 +21,7 @@ export function DragonAvatar({ catalogId, rarity, size = "md", className, ready 
     <div className={cn("relative", className)}>
       <div
         className={cn(
-          "rounded-2xl overflow-hidden bg-card flex items-center justify-center p-1.5",
+          "rounded-full overflow-hidden bg-card flex items-center justify-center",
           `rarity-${rarity}`,
           sizes[size],
         )}
@@ -30,15 +30,18 @@ export function DragonAvatar({ catalogId, rarity, size = "md", className, ready 
           src={dragonImage(catalogId)}
           alt={dragonName(catalogId)}
           loading="lazy"
-          width={512}
-          height={512}
-          className="w-full h-full object-contain drop-shadow-lg"
+          width={1024}
+          height={1024}
+          className="w-full h-full object-cover"
         />
       </div>
       {ready && (
         <span className="absolute -top-1 -right-1 inline-flex h-3 w-3 rounded-full bg-primary animate-pulse-ring" />
       )}
-      <span className="absolute -bottom-2 left-1/2 -translate-x-1/2 text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded bg-background/80 border border-border text-foreground">
+      <span className={cn(
+        "absolute -bottom-2 left-1/2 -translate-x-1/2 text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full bg-background/90 border font-display whitespace-nowrap",
+        `border-rarity-${rarity} text-rarity-${rarity}`,
+      )} style={{ borderColor: `var(--rarity-${rarity})`, color: `var(--rarity-${rarity})` }}>
         {RARITY_LABEL[rarity]}
       </span>
     </div>

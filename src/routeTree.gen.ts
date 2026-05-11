@@ -11,7 +11,12 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedMarketplaceRouteImport } from './routes/_authenticated/marketplace'
+import { Route as AuthenticatedLeaderboardRouteImport } from './routes/_authenticated/leaderboard'
 import { Route as AuthenticatedFarmRouteImport } from './routes/_authenticated/farm'
+import { Route as AuthenticatedCodexRouteImport } from './routes/_authenticated/codex'
+import { Route as AuthenticatedBreedRouteImport } from './routes/_authenticated/breed'
+import { Route as AuthenticatedArenaRouteImport } from './routes/_authenticated/arena'
 
 const AuthenticatedRoute = AuthenticatedRouteImport.update({
   id: '/_authenticated',
@@ -22,32 +27,97 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedMarketplaceRoute =
+  AuthenticatedMarketplaceRouteImport.update({
+    id: '/marketplace',
+    path: '/marketplace',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedLeaderboardRoute =
+  AuthenticatedLeaderboardRouteImport.update({
+    id: '/leaderboard',
+    path: '/leaderboard',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedFarmRoute = AuthenticatedFarmRouteImport.update({
   id: '/farm',
   path: '/farm',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedCodexRoute = AuthenticatedCodexRouteImport.update({
+  id: '/codex',
+  path: '/codex',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedBreedRoute = AuthenticatedBreedRouteImport.update({
+  id: '/breed',
+  path: '/breed',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedArenaRoute = AuthenticatedArenaRouteImport.update({
+  id: '/arena',
+  path: '/arena',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/arena': typeof AuthenticatedArenaRoute
+  '/breed': typeof AuthenticatedBreedRoute
+  '/codex': typeof AuthenticatedCodexRoute
   '/farm': typeof AuthenticatedFarmRoute
+  '/leaderboard': typeof AuthenticatedLeaderboardRoute
+  '/marketplace': typeof AuthenticatedMarketplaceRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/arena': typeof AuthenticatedArenaRoute
+  '/breed': typeof AuthenticatedBreedRoute
+  '/codex': typeof AuthenticatedCodexRoute
   '/farm': typeof AuthenticatedFarmRoute
+  '/leaderboard': typeof AuthenticatedLeaderboardRoute
+  '/marketplace': typeof AuthenticatedMarketplaceRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteWithChildren
+  '/_authenticated/arena': typeof AuthenticatedArenaRoute
+  '/_authenticated/breed': typeof AuthenticatedBreedRoute
+  '/_authenticated/codex': typeof AuthenticatedCodexRoute
   '/_authenticated/farm': typeof AuthenticatedFarmRoute
+  '/_authenticated/leaderboard': typeof AuthenticatedLeaderboardRoute
+  '/_authenticated/marketplace': typeof AuthenticatedMarketplaceRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/farm'
+  fullPaths:
+    | '/'
+    | '/arena'
+    | '/breed'
+    | '/codex'
+    | '/farm'
+    | '/leaderboard'
+    | '/marketplace'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/farm'
-  id: '__root__' | '/' | '/_authenticated' | '/_authenticated/farm'
+  to:
+    | '/'
+    | '/arena'
+    | '/breed'
+    | '/codex'
+    | '/farm'
+    | '/leaderboard'
+    | '/marketplace'
+  id:
+    | '__root__'
+    | '/'
+    | '/_authenticated'
+    | '/_authenticated/arena'
+    | '/_authenticated/breed'
+    | '/_authenticated/codex'
+    | '/_authenticated/farm'
+    | '/_authenticated/leaderboard'
+    | '/_authenticated/marketplace'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -71,6 +141,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/marketplace': {
+      id: '/_authenticated/marketplace'
+      path: '/marketplace'
+      fullPath: '/marketplace'
+      preLoaderRoute: typeof AuthenticatedMarketplaceRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/leaderboard': {
+      id: '/_authenticated/leaderboard'
+      path: '/leaderboard'
+      fullPath: '/leaderboard'
+      preLoaderRoute: typeof AuthenticatedLeaderboardRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/farm': {
       id: '/_authenticated/farm'
       path: '/farm'
@@ -78,15 +162,46 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedFarmRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/codex': {
+      id: '/_authenticated/codex'
+      path: '/codex'
+      fullPath: '/codex'
+      preLoaderRoute: typeof AuthenticatedCodexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/breed': {
+      id: '/_authenticated/breed'
+      path: '/breed'
+      fullPath: '/breed'
+      preLoaderRoute: typeof AuthenticatedBreedRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/arena': {
+      id: '/_authenticated/arena'
+      path: '/arena'
+      fullPath: '/arena'
+      preLoaderRoute: typeof AuthenticatedArenaRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
   }
 }
 
 interface AuthenticatedRouteChildren {
+  AuthenticatedArenaRoute: typeof AuthenticatedArenaRoute
+  AuthenticatedBreedRoute: typeof AuthenticatedBreedRoute
+  AuthenticatedCodexRoute: typeof AuthenticatedCodexRoute
   AuthenticatedFarmRoute: typeof AuthenticatedFarmRoute
+  AuthenticatedLeaderboardRoute: typeof AuthenticatedLeaderboardRoute
+  AuthenticatedMarketplaceRoute: typeof AuthenticatedMarketplaceRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
+  AuthenticatedArenaRoute: AuthenticatedArenaRoute,
+  AuthenticatedBreedRoute: AuthenticatedBreedRoute,
+  AuthenticatedCodexRoute: AuthenticatedCodexRoute,
   AuthenticatedFarmRoute: AuthenticatedFarmRoute,
+  AuthenticatedLeaderboardRoute: AuthenticatedLeaderboardRoute,
+  AuthenticatedMarketplaceRoute: AuthenticatedMarketplaceRoute,
 }
 
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
