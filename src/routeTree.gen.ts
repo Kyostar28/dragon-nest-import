@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedWorldRouteImport } from './routes/_authenticated/world'
 import { Route as AuthenticatedMarketplaceRouteImport } from './routes/_authenticated/marketplace'
 import { Route as AuthenticatedLeaderboardRouteImport } from './routes/_authenticated/leaderboard'
 import { Route as AuthenticatedFarmRouteImport } from './routes/_authenticated/farm'
@@ -26,6 +27,11 @@ const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedWorldRoute = AuthenticatedWorldRouteImport.update({
+  id: '/world',
+  path: '/world',
+  getParentRoute: () => AuthenticatedRoute,
 } as any)
 const AuthenticatedMarketplaceRoute =
   AuthenticatedMarketplaceRouteImport.update({
@@ -68,6 +74,7 @@ export interface FileRoutesByFullPath {
   '/farm': typeof AuthenticatedFarmRoute
   '/leaderboard': typeof AuthenticatedLeaderboardRoute
   '/marketplace': typeof AuthenticatedMarketplaceRoute
+  '/world': typeof AuthenticatedWorldRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -77,6 +84,7 @@ export interface FileRoutesByTo {
   '/farm': typeof AuthenticatedFarmRoute
   '/leaderboard': typeof AuthenticatedLeaderboardRoute
   '/marketplace': typeof AuthenticatedMarketplaceRoute
+  '/world': typeof AuthenticatedWorldRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -88,6 +96,7 @@ export interface FileRoutesById {
   '/_authenticated/farm': typeof AuthenticatedFarmRoute
   '/_authenticated/leaderboard': typeof AuthenticatedLeaderboardRoute
   '/_authenticated/marketplace': typeof AuthenticatedMarketplaceRoute
+  '/_authenticated/world': typeof AuthenticatedWorldRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -99,6 +108,7 @@ export interface FileRouteTypes {
     | '/farm'
     | '/leaderboard'
     | '/marketplace'
+    | '/world'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -108,6 +118,7 @@ export interface FileRouteTypes {
     | '/farm'
     | '/leaderboard'
     | '/marketplace'
+    | '/world'
   id:
     | '__root__'
     | '/'
@@ -118,6 +129,7 @@ export interface FileRouteTypes {
     | '/_authenticated/farm'
     | '/_authenticated/leaderboard'
     | '/_authenticated/marketplace'
+    | '/_authenticated/world'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -140,6 +152,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/world': {
+      id: '/_authenticated/world'
+      path: '/world'
+      fullPath: '/world'
+      preLoaderRoute: typeof AuthenticatedWorldRouteImport
+      parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/marketplace': {
       id: '/_authenticated/marketplace'
@@ -193,6 +212,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedFarmRoute: typeof AuthenticatedFarmRoute
   AuthenticatedLeaderboardRoute: typeof AuthenticatedLeaderboardRoute
   AuthenticatedMarketplaceRoute: typeof AuthenticatedMarketplaceRoute
+  AuthenticatedWorldRoute: typeof AuthenticatedWorldRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
@@ -202,6 +222,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedFarmRoute: AuthenticatedFarmRoute,
   AuthenticatedLeaderboardRoute: AuthenticatedLeaderboardRoute,
   AuthenticatedMarketplaceRoute: AuthenticatedMarketplaceRoute,
+  AuthenticatedWorldRoute: AuthenticatedWorldRoute,
 }
 
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
@@ -215,3 +236,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
