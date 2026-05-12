@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@/hooks/use-auth";
 import { fetchProfile } from "@/lib/game";
 import { Button } from "@/components/ui/button";
-import { LogOut, Sprout, Heart, Store, Swords, BookOpen, Trophy } from "lucide-react";
+import { LogOut, Sprout, Heart, Store, Swords, BookOpen, Trophy, Globe } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 function shortAddr(a: string) {
@@ -14,6 +14,7 @@ function shortAddr(a: string) {
 
 const navItems = [
   { to: "/farm", label: "Farm", icon: Sprout },
+  { to: "/world", label: "Mundo", icon: Globe },
   { to: "/breed", label: "Breed", icon: Heart },
   { to: "/marketplace", label: "Market", icon: Store },
   { to: "/arena", label: "Arena", icon: Swords },

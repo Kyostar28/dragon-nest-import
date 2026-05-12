@@ -11,12 +11,15 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedWorldRouteImport } from './routes/_authenticated/world'
 import { Route as AuthenticatedMarketplaceRouteImport } from './routes/_authenticated/marketplace'
 import { Route as AuthenticatedLeaderboardRouteImport } from './routes/_authenticated/leaderboard'
 import { Route as AuthenticatedFarmRouteImport } from './routes/_authenticated/farm'
 import { Route as AuthenticatedCodexRouteImport } from './routes/_authenticated/codex'
 import { Route as AuthenticatedBreedRouteImport } from './routes/_authenticated/breed'
 import { Route as AuthenticatedArenaRouteImport } from './routes/_authenticated/arena'
+import { Route as AuthenticatedWorldForestRouteImport } from './routes/_authenticated/world.forest'
+import { Route as AuthenticatedWorldForestStageRouteImport } from './routes/_authenticated/world.forest.$stage'
 
 const AuthenticatedRoute = AuthenticatedRouteImport.update({
   id: '/_authenticated',
@@ -26,6 +29,11 @@ const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedWorldRoute = AuthenticatedWorldRouteImport.update({
+  id: '/world',
+  path: '/world',
+  getParentRoute: () => AuthenticatedRoute,
 } as any)
 const AuthenticatedMarketplaceRoute =
   AuthenticatedMarketplaceRouteImport.update({
@@ -59,6 +67,18 @@ const AuthenticatedArenaRoute = AuthenticatedArenaRouteImport.update({
   path: '/arena',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedWorldForestRoute =
+  AuthenticatedWorldForestRouteImport.update({
+    id: '/forest',
+    path: '/forest',
+    getParentRoute: () => AuthenticatedWorldRoute,
+  } as any)
+const AuthenticatedWorldForestStageRoute =
+  AuthenticatedWorldForestStageRouteImport.update({
+    id: '/$stage',
+    path: '/$stage',
+    getParentRoute: () => AuthenticatedWorldForestRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -68,6 +88,9 @@ export interface FileRoutesByFullPath {
   '/farm': typeof AuthenticatedFarmRoute
   '/leaderboard': typeof AuthenticatedLeaderboardRoute
   '/marketplace': typeof AuthenticatedMarketplaceRoute
+  '/world': typeof AuthenticatedWorldRouteWithChildren
+  '/world/forest': typeof AuthenticatedWorldForestRouteWithChildren
+  '/world/forest/$stage': typeof AuthenticatedWorldForestStageRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -77,6 +100,9 @@ export interface FileRoutesByTo {
   '/farm': typeof AuthenticatedFarmRoute
   '/leaderboard': typeof AuthenticatedLeaderboardRoute
   '/marketplace': typeof AuthenticatedMarketplaceRoute
+  '/world': typeof AuthenticatedWorldRouteWithChildren
+  '/world/forest': typeof AuthenticatedWorldForestRouteWithChildren
+  '/world/forest/$stage': typeof AuthenticatedWorldForestStageRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -88,6 +114,9 @@ export interface FileRoutesById {
   '/_authenticated/farm': typeof AuthenticatedFarmRoute
   '/_authenticated/leaderboard': typeof AuthenticatedLeaderboardRoute
   '/_authenticated/marketplace': typeof AuthenticatedMarketplaceRoute
+  '/_authenticated/world': typeof AuthenticatedWorldRouteWithChildren
+  '/_authenticated/world/forest': typeof AuthenticatedWorldForestRouteWithChildren
+  '/_authenticated/world/forest/$stage': typeof AuthenticatedWorldForestStageRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -99,6 +128,9 @@ export interface FileRouteTypes {
     | '/farm'
     | '/leaderboard'
     | '/marketplace'
+    | '/world'
+    | '/world/forest'
+    | '/world/forest/$stage'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -108,6 +140,9 @@ export interface FileRouteTypes {
     | '/farm'
     | '/leaderboard'
     | '/marketplace'
+    | '/world'
+    | '/world/forest'
+    | '/world/forest/$stage'
   id:
     | '__root__'
     | '/'
@@ -118,6 +153,9 @@ export interface FileRouteTypes {
     | '/_authenticated/farm'
     | '/_authenticated/leaderboard'
     | '/_authenticated/marketplace'
+    | '/_authenticated/world'
+    | '/_authenticated/world/forest'
+    | '/_authenticated/world/forest/$stage'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -140,6 +178,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/world': {
+      id: '/_authenticated/world'
+      path: '/world'
+      fullPath: '/world'
+      preLoaderRoute: typeof AuthenticatedWorldRouteImport
+      parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/marketplace': {
       id: '/_authenticated/marketplace'
@@ -183,8 +228,47 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedArenaRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/world/forest': {
+      id: '/_authenticated/world/forest'
+      path: '/forest'
+      fullPath: '/world/forest'
+      preLoaderRoute: typeof AuthenticatedWorldForestRouteImport
+      parentRoute: typeof AuthenticatedWorldRoute
+    }
+    '/_authenticated/world/forest/$stage': {
+      id: '/_authenticated/world/forest/$stage'
+      path: '/$stage'
+      fullPath: '/world/forest/$stage'
+      preLoaderRoute: typeof AuthenticatedWorldForestStageRouteImport
+      parentRoute: typeof AuthenticatedWorldForestRoute
+    }
   }
 }
+
+interface AuthenticatedWorldForestRouteChildren {
+  AuthenticatedWorldForestStageRoute: typeof AuthenticatedWorldForestStageRoute
+}
+
+const AuthenticatedWorldForestRouteChildren: AuthenticatedWorldForestRouteChildren =
+  {
+    AuthenticatedWorldForestStageRoute: AuthenticatedWorldForestStageRoute,
+  }
+
+const AuthenticatedWorldForestRouteWithChildren =
+  AuthenticatedWorldForestRoute._addFileChildren(
+    AuthenticatedWorldForestRouteChildren,
+  )
+
+interface AuthenticatedWorldRouteChildren {
+  AuthenticatedWorldForestRoute: typeof AuthenticatedWorldForestRouteWithChildren
+}
+
+const AuthenticatedWorldRouteChildren: AuthenticatedWorldRouteChildren = {
+  AuthenticatedWorldForestRoute: AuthenticatedWorldForestRouteWithChildren,
+}
+
+const AuthenticatedWorldRouteWithChildren =
+  AuthenticatedWorldRoute._addFileChildren(AuthenticatedWorldRouteChildren)
 
 interface AuthenticatedRouteChildren {
   AuthenticatedArenaRoute: typeof AuthenticatedArenaRoute
@@ -193,6 +277,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedFarmRoute: typeof AuthenticatedFarmRoute
   AuthenticatedLeaderboardRoute: typeof AuthenticatedLeaderboardRoute
   AuthenticatedMarketplaceRoute: typeof AuthenticatedMarketplaceRoute
+  AuthenticatedWorldRoute: typeof AuthenticatedWorldRouteWithChildren
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
@@ -202,6 +287,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedFarmRoute: AuthenticatedFarmRoute,
   AuthenticatedLeaderboardRoute: AuthenticatedLeaderboardRoute,
   AuthenticatedMarketplaceRoute: AuthenticatedMarketplaceRoute,
+  AuthenticatedWorldRoute: AuthenticatedWorldRouteWithChildren,
 }
 
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
@@ -215,13 +301,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

@@ -53,6 +53,9 @@ export type DBDragon = {
   placed_in_nest: string | null;
   farming_started_at: string | null;
   egg_ready: boolean;
+  level: number | null;
+  xp: number | null;
+  current_hp: number | null;
 };
 
 export type DBNest = {

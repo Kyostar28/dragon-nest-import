@@ -14,9 +14,104 @@ export type Database = {
   }
   public: {
     Tables: {
+      battle_sessions: {
+        Row: {
+          created_at: string
+          current_mob_index: number
+          dragon_id: string
+          id: string
+          mob_sequence: Json
+          stage_id: number
+          state: Json
+          status: string
+          turn: string
+          turn_started_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          current_mob_index?: number
+          dragon_id: string
+          id?: string
+          mob_sequence: Json
+          stage_id: number
+          state?: Json
+          status?: string
+          turn?: string
+          turn_started_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          current_mob_index?: number
+          dragon_id?: string
+          id?: string
+          mob_sequence?: Json
+          stage_id?: number
+          state?: Json
+          status?: string
+          turn?: string
+          turn_started_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "battle_sessions_dragon_id_fkey"
+            columns: ["dragon_id"]
+            isOneToOne: false
+            referencedRelation: "user_dragons"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "battle_sessions_stage_id_fkey"
+            columns: ["stage_id"]
+            isOneToOne: false
+            referencedRelation: "world_stages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      dragon_spells: {
+        Row: {
+          ap_cost: number
+          damage: number
+          description: string | null
+          element: Database["public"]["Enums"]["dragon_element"]
+          icon: string | null
+          id: number
+          min_level: number
+          name: string
+        }
+        Insert: {
+          ap_cost: number
+          damage: number
+          description?: string | null
+          element: Database["public"]["Enums"]["dragon_element"]
+          icon?: string | null
+          id?: number
+          min_level?: number
+          name: string
+        }
+        Update: {
+          ap_cost?: number
+          damage?: number
+          description?: string | null
+          element?: Database["public"]["Enums"]["dragon_element"]
+          icon?: string | null
+          id?: number
+          min_level?: number
+          name?: string
+        }
+        Relationships: []
+      }
       dragons_catalog: {
         Row: {
+          base_ap: number
+          base_crit: number
+          base_defense: number
+          base_hp: number
           description: string | null
+          element: Database["public"]["Enums"]["dragon_element"]
           id: number
           interval_seconds: number
           name: string
@@ -24,7 +119,12 @@ export type Database = {
           slug: string
         }
         Insert: {
+          base_ap?: number
+          base_crit?: number
+          base_defense?: number
+          base_hp?: number
           description?: string | null
+          element?: Database["public"]["Enums"]["dragon_element"]
           id: number
           interval_seconds: number
           name: string
@@ -32,11 +132,61 @@ export type Database = {
           slug: string
         }
         Update: {
+          base_ap?: number
+          base_crit?: number
+          base_defense?: number
+          base_hp?: number
           description?: string | null
+          element?: Database["public"]["Enums"]["dragon_element"]
           id?: number
           interval_seconds?: number
           name?: string
           points_per_egg?: number
+          slug?: string
+        }
+        Relationships: []
+      }
+      mobs: {
+        Row: {
+          ap: number
+          attack: number
+          crit: number
+          defense: number
+          element: Database["public"]["Enums"]["dragon_element"]
+          hp: number
+          icon: string | null
+          id: number
+          is_boss: boolean
+          level: number
+          name: string
+          slug: string
+        }
+        Insert: {
+          ap?: number
+          attack: number
+          crit?: number
+          defense: number
+          element?: Database["public"]["Enums"]["dragon_element"]
+          hp: number
+          icon?: string | null
+          id?: number
+          is_boss?: boolean
+          level?: number
+          name: string
+          slug: string
+        }
+        Update: {
+          ap?: number
+          attack?: number
+          crit?: number
+          defense?: number
+          element?: Database["public"]["Enums"]["dragon_element"]
+          hp?: number
+          icon?: string | null
+          id?: number
+          is_boss?: boolean
+          level?: number
+          name?: string
           slug?: string
         }
         Relationships: []
@@ -166,32 +316,41 @@ export type Database = {
         Row: {
           catalog_id: number
           created_at: string
+          current_hp: number | null
           egg_ready: boolean
           farming_started_at: string | null
           id: string
+          level: number
           placed_in_nest: string | null
           rarity: Database["public"]["Enums"]["rarity"]
           user_id: string
+          xp: number
         }
         Insert: {
           catalog_id: number
           created_at?: string
+          current_hp?: number | null
           egg_ready?: boolean
           farming_started_at?: string | null
           id?: string
+          level?: number
           placed_in_nest?: string | null
           rarity?: Database["public"]["Enums"]["rarity"]
           user_id: string
+          xp?: number
         }
         Update: {
           catalog_id?: number
           created_at?: string
+          current_hp?: number | null
           egg_ready?: boolean
           farming_started_at?: string | null
           id?: string
+          level?: number
           placed_in_nest?: string | null
           rarity?: Database["public"]["Enums"]["rarity"]
           user_id?: string
+          xp?: number
         }
         Relationships: [
           {
@@ -259,6 +418,32 @@ export type Database = {
         }
         Relationships: []
       }
+      user_progress: {
+        Row: {
+          max_stage_unlocked: number
+          user_id: string
+          zone_id: number
+        }
+        Insert: {
+          max_stage_unlocked?: number
+          user_id: string
+          zone_id: number
+        }
+        Update: {
+          max_stage_unlocked?: number
+          user_id?: string
+          zone_id?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_progress_zone_id_fkey"
+            columns: ["zone_id"]
+            isOneToOne: false
+            referencedRelation: "world_zones"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_slots: {
         Row: {
           slot_index: number
@@ -277,14 +462,97 @@ export type Database = {
         }
         Relationships: []
       }
+      world_stages: {
+        Row: {
+          boss_mob_id: number | null
+          has_boss: boolean
+          id: number
+          mob_pool: Json
+          stage_number: number
+          zone_id: number
+        }
+        Insert: {
+          boss_mob_id?: number | null
+          has_boss?: boolean
+          id?: number
+          mob_pool?: Json
+          stage_number: number
+          zone_id: number
+        }
+        Update: {
+          boss_mob_id?: number | null
+          has_boss?: boolean
+          id?: number
+          mob_pool?: Json
+          stage_number?: number
+          zone_id?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "world_stages_boss_mob_id_fkey"
+            columns: ["boss_mob_id"]
+            isOneToOne: false
+            referencedRelation: "mobs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "world_stages_zone_id_fkey"
+            columns: ["zone_id"]
+            isOneToOne: false
+            referencedRelation: "world_zones"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      world_zones: {
+        Row: {
+          description: string | null
+          id: number
+          kind: string
+          name: string
+          slug: string
+        }
+        Insert: {
+          description?: string | null
+          id?: number
+          kind: string
+          name: string
+          slug: string
+        }
+        Update: {
+          description?: string | null
+          id?: number
+          kind?: string
+          name?: string
+          slug?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
+      breed_dragons: { Args: { d1: string; d2: string }; Returns: string }
+      breed_nests: { Args: { n1: string; n2: string }; Returns: string }
       get_active_pool: { Args: never; Returns: number }
+      next_rarity: {
+        Args: { _r: Database["public"]["Enums"]["rarity"] }
+        Returns: Database["public"]["Enums"]["rarity"]
+      }
     }
     Enums: {
+      dragon_element:
+        | "fire"
+        | "water"
+        | "earth"
+        | "air"
+        | "light"
+        | "dark"
+        | "nature"
+        | "arcane"
+        | "ice"
+        | "thunder"
       rarity: "common" | "uncommon" | "rare" | "epic" | "legendary"
     }
     CompositeTypes: {
@@ -413,6 +681,18 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      dragon_element: [
+        "fire",
+        "water",
+        "earth",
+        "air",
+        "light",
+        "dark",
+        "nature",
+        "arcane",
+        "ice",
+        "thunder",
+      ],
       rarity: ["common", "uncommon", "rare", "epic", "legendary"],
     },
   },
