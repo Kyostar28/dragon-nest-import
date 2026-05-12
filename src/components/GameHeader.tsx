@@ -14,6 +14,7 @@ function shortAddr(a: string) {
 
 const navItems = [
   { to: "/farm", label: "Farm", icon: Sprout },
+  { to: "/world", label: "Mundo", icon: Globe },
   { to: "/breed", label: "Breed", icon: Heart },
   { to: "/marketplace", label: "Market", icon: Store },
   { to: "/arena", label: "Arena", icon: Swords },
