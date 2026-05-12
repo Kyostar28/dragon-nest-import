@@ -18,6 +18,7 @@ import { Route as AuthenticatedFarmRouteImport } from './routes/_authenticated/f
 import { Route as AuthenticatedCodexRouteImport } from './routes/_authenticated/codex'
 import { Route as AuthenticatedBreedRouteImport } from './routes/_authenticated/breed'
 import { Route as AuthenticatedArenaRouteImport } from './routes/_authenticated/arena'
+import { Route as AuthenticatedWorldForestRouteImport } from './routes/_authenticated/world.forest'
 
 const AuthenticatedRoute = AuthenticatedRouteImport.update({
   id: '/_authenticated',
@@ -65,6 +66,12 @@ const AuthenticatedArenaRoute = AuthenticatedArenaRouteImport.update({
   path: '/arena',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedWorldForestRoute =
+  AuthenticatedWorldForestRouteImport.update({
+    id: '/forest',
+    path: '/forest',
+    getParentRoute: () => AuthenticatedWorldRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -74,7 +81,8 @@ export interface FileRoutesByFullPath {
   '/farm': typeof AuthenticatedFarmRoute
   '/leaderboard': typeof AuthenticatedLeaderboardRoute
   '/marketplace': typeof AuthenticatedMarketplaceRoute
-  '/world': typeof AuthenticatedWorldRoute
+  '/world': typeof AuthenticatedWorldRouteWithChildren
+  '/world/forest': typeof AuthenticatedWorldForestRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -84,7 +92,8 @@ export interface FileRoutesByTo {
   '/farm': typeof AuthenticatedFarmRoute
   '/leaderboard': typeof AuthenticatedLeaderboardRoute
   '/marketplace': typeof AuthenticatedMarketplaceRoute
-  '/world': typeof AuthenticatedWorldRoute
+  '/world': typeof AuthenticatedWorldRouteWithChildren
+  '/world/forest': typeof AuthenticatedWorldForestRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -96,7 +105,8 @@ export interface FileRoutesById {
   '/_authenticated/farm': typeof AuthenticatedFarmRoute
   '/_authenticated/leaderboard': typeof AuthenticatedLeaderboardRoute
   '/_authenticated/marketplace': typeof AuthenticatedMarketplaceRoute
-  '/_authenticated/world': typeof AuthenticatedWorldRoute
+  '/_authenticated/world': typeof AuthenticatedWorldRouteWithChildren
+  '/_authenticated/world/forest': typeof AuthenticatedWorldForestRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -109,6 +119,7 @@ export interface FileRouteTypes {
     | '/leaderboard'
     | '/marketplace'
     | '/world'
+    | '/world/forest'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -119,6 +130,7 @@ export interface FileRouteTypes {
     | '/leaderboard'
     | '/marketplace'
     | '/world'
+    | '/world/forest'
   id:
     | '__root__'
     | '/'
@@ -130,6 +142,7 @@ export interface FileRouteTypes {
     | '/_authenticated/leaderboard'
     | '/_authenticated/marketplace'
     | '/_authenticated/world'
+    | '/_authenticated/world/forest'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -202,8 +215,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedArenaRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/world/forest': {
+      id: '/_authenticated/world/forest'
+      path: '/forest'
+      fullPath: '/world/forest'
+      preLoaderRoute: typeof AuthenticatedWorldForestRouteImport
+      parentRoute: typeof AuthenticatedWorldRoute
+    }
   }
 }
+
+interface AuthenticatedWorldRouteChildren {
+  AuthenticatedWorldForestRoute: typeof AuthenticatedWorldForestRoute
+}
+
+const AuthenticatedWorldRouteChildren: AuthenticatedWorldRouteChildren = {
+  AuthenticatedWorldForestRoute: AuthenticatedWorldForestRoute,
+}
+
+const AuthenticatedWorldRouteWithChildren =
+  AuthenticatedWorldRoute._addFileChildren(AuthenticatedWorldRouteChildren)
 
 interface AuthenticatedRouteChildren {
   AuthenticatedArenaRoute: typeof AuthenticatedArenaRoute
@@ -212,7 +243,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedFarmRoute: typeof AuthenticatedFarmRoute
   AuthenticatedLeaderboardRoute: typeof AuthenticatedLeaderboardRoute
   AuthenticatedMarketplaceRoute: typeof AuthenticatedMarketplaceRoute
-  AuthenticatedWorldRoute: typeof AuthenticatedWorldRoute
+  AuthenticatedWorldRoute: typeof AuthenticatedWorldRouteWithChildren
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
@@ -222,7 +253,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedFarmRoute: AuthenticatedFarmRoute,
   AuthenticatedLeaderboardRoute: AuthenticatedLeaderboardRoute,
   AuthenticatedMarketplaceRoute: AuthenticatedMarketplaceRoute,
-  AuthenticatedWorldRoute: AuthenticatedWorldRoute,
+  AuthenticatedWorldRoute: AuthenticatedWorldRouteWithChildren,
 }
 
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
