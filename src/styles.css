@@ -177,4 +177,31 @@
     100% { box-shadow: 0 0 0 14px oklch(0.78 0.22 150 / 0); }
   }
   .animate-pulse-ring { animation: pulse-ring 2s infinite; border-radius: 9999px; }
+
+  /* Floating green particles (bottom -> top) */
+  .particles {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 0;
+  }
+  .particle {
+    position: absolute;
+    bottom: -10vh;
+    border-radius: 9999px;
+    background: var(--primary);
+    box-shadow: 0 0 10px oklch(0.78 0.22 150 / 0.8), 0 0 20px oklch(0.85 0.25 145 / 0.5);
+    animation-name: particle-rise;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+  }
+  @keyframes particle-rise {
+    0% { transform: translate3d(0, 0, 0) scale(0.8); }
+    50% { transform: translate3d(var(--drift, 0px), -55vh, 0) scale(1.1); }
+    100% { transform: translate3d(0, -115vh, 0) scale(0.7); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .particle { animation: none; opacity: 0.2 !important; }
+  }
 }
