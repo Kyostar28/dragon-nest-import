@@ -9,6 +9,7 @@ import {
 } from "@tanstack/react-router";
 import { Toaster } from "@/components/ui/sonner";
 import { AuthProvider } from "@/hooks/use-auth";
+import { Particles } from "@/components/Particles";
 
 import appCss from "../styles.css?url";
 
@@ -91,7 +92,10 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <Outlet />
+        <Particles />
+        <div className="relative z-10">
+          <Outlet />
+        </div>
         <Toaster richColors theme="dark" />
       </AuthProvider>
     </QueryClientProvider>
