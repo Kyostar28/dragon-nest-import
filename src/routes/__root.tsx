@@ -91,7 +91,10 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <Outlet />
+        <Particles />
+        <div className="relative z-10">
+          <Outlet />
+        </div>
         <Toaster richColors theme="dark" />
       </AuthProvider>
     </QueryClientProvider>
